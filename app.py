@@ -53,7 +53,7 @@ else:
                 if email_input and "@" in email_input:
                     try:
                         # 1. 기존 데이터 읽기 (시트가 비어있을 경우 대비)
-                        existing_data = conn.read(worksheet="Anti-Turtle-Neck AI", usecols=[0, 1])
+                        existing_data = conn.read(worksheet="시트1", usecols=[0, 1])
                         
                         # 2. 새 데이터 생성
                         new_data = pd.DataFrame({
@@ -63,7 +63,7 @@ else:
                         
                         # 3. 데이터 합치기 및 구글 시트 업데이트
                         updated_df = pd.concat([existing_data, new_data], ignore_index=True)
-                        conn.update(worksheet="Anti-Turtle-Neck AI", data=updated_df)
+                        conn.update(worksheet="시트1", data=updated_df)
                         
                         st.session_state.email_submitted = True
                         st.rerun()
