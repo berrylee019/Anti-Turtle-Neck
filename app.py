@@ -1,0 +1,53 @@
+import streamlit as st
+import os
+
+# 페이지 설정
+st.set_page_config(page_title="Anti-Turtle-Neck", page_icon="🐢")
+
+# 세션 상태 초기화
+if "clicked_buy" not in st.session_state:
+    st.session_state.clicked_buy = False
+if "email_submitted" not in st.session_state:
+    st.session_state.email_submitted = False
+
+# 헤드카피
+st.title("🧘 AI 자세 교정 도우미")
+st.header("의자에 앉아 일하기 전, 자세를 잡아드립니다!")
+
+st.write("노트북 웹캠만으로 실시간 자세를 감지하고 거북목을 방지하세요.")
+
+# 핵심 가치 제안
+with st.expander("✨ 주요 기능 보기"):
+    st.write("- 실시간 웹캠 자세 분석")
+    st.write("- 업무 몰입을 깨지 않는 무소음 알림")
+    st.write("- 일간 자세 교정 리포트 제공")
+
+st.write("---")
+st.subheader("💳 프리미엄 영구 라이선스")
+st.write("~~정가 39,000원~~ ➡️ **특별가: 19,000원 (선착순정 한정)**")
+
+# 구매 및 이메일 수집 로직
+if not st.session_state.clicked_buy:
+    if st.button("지금 구매하고 바로 시작하기 🚀", use_container_width=True, type="primary"):
+        st.session_state.clicked_buy = True
+        st.rerun()
+else:
+    if not st.session_state.email_submitted:
+        st.warning("⚠️ 현재 사전 예약 인원이 마감되었습니다.")
+        st.info("이메일을 남겨주시면 정식 론칭 시 **50% 추가 할인 쿠폰**을 보내드립니다!")
+        
+        with st.form("email_form"):
+            email_input = st.text_input("할인 혜택을 받을 이메일 주소")
+            submit = st.form_submit_button("50% 할인 예약하기")
+            
+            if submit:
+                if email_input and "@" in email_input:
+                    # 데이터 저장 (collected_emails.txt)
+                    with open("collected_emails.txt", "a") as f:
+                        f.write(f"{email_input}\n")
+                    st.session_state.email_submitted = True
+                    st.rerun()
+                else:
+                    st.error("올바른 이메일을 입력해주세요.")
+    else:
+        st.success("🎉 등록 완료! 정식 출시 때 가장 먼저 연락드리겠습니다.")
