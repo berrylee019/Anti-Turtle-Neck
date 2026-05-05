@@ -12,7 +12,7 @@ if "email_submitted" not in st.session_state:
 
 # 헤드카피
 st.title("🧘 AI 자세 교정 도우미")
-st.header("의자에 앉아 일하기 전, 자세를 잡아드립니다!"
+st.header("의자에 앉아 일하기 전, 자세를 잡아드립니다!")
 st.header("언제 어디서든 바른 자세를 유지하세요!")
 
 st.write("노트북 웹캠은 물론, **스마트폰 전면 카메라**로도 실시간 자세 교정이 가능합니다. "
