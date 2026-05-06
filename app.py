@@ -73,13 +73,13 @@ else:
                 if email_input and "@" in email_input:
                     try:
                         # 구글 시트 업데이트
-                        existing_data = conn.read(worksheet="Sheet1", usecols=[0, 1])
+                        existing_data = conn.read(worksheet="시트1", usecols=[0, 1])
                         new_data = pd.DataFrame({
                             "Email": [email_input],
                             "Date": [datetime.now().strftime("%Y-%m-%d %H:%M:%S")]
                         })
                         updated_df = pd.concat([existing_data, new_data], ignore_index=True)
-                        conn.update(worksheet="Sheet1", data=updated_df)
+                        conn.update(worksheet="시트1", data=updated_df)
                         
                         st.session_state.email_submitted = True
                         st.rerun()
