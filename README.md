@@ -10,3 +10,7 @@
 ## 📱 Multi-Device Support
 - **Desktop**: 업무 중 노트북 웹캠을 통한 정밀 모니터링
 - **Mobile/Tablet**: 스마트폰 거치대를 활용하여 장소 구애 없이 자세 교정 (iOS/Android 지원)
+
+==
+이 프로젝트는 아이디어 검증을 위한 MVP(Minimum Viable Product) 단계입니다. 현재 핵심 엔진을 빌드 중이며, 웹 브라우저 데모를 통해 비즈니스 가치를 먼저 확인하고 있습니다.
+==
