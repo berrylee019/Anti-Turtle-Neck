@@ -4,6 +4,65 @@ import pandas as pd
 from datetime import datetime
 import time
 
+import streamlit as st
+
+def login():
+    # 🎨 화면 스타일링 (CSS)
+    st.markdown("""
+        <style>
+        .login-card {
+            background-color: #f0f2f6;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .stButton>button {
+            width: 100%;
+            border-radius: 20px;
+            background-color: #4CAF50;
+            color: white;
+        }
+        </style>
+    """, unsafe_allow_html=True)
+
+    # 로그인 세션 상태 초기화
+    if "logged_in" not in st.session_state:
+        st.session_state.logged_in = False
+
+    if not st.session_state.logged_in:
+        # 화면 중앙 정렬을 위한 컬럼 구성
+        col1, col2, col3 = st.columns([1, 2, 1])
+        
+        with col2:
+            st.markdown('<div class="login-card">', unsafe_allow_html=True)
+            st.image("https://cdn-icons-png.flaticon.com/512/3022/3022221.png", width=80) # 거북목 관련 아이콘
+            st.title("Anti-Turtle-Neck AI")
+            st.write("서비스 이용을 위해 비밀번호를 입력해주세요.")
+            
+            # 입력 창
+            password = st.text_input("Password", type="password", placeholder="Enter secret password")
+            
+            if st.button("Login"):
+                # 🛡️ st.secrets에서 비밀번호 확인
+                if password == st.secrets["LOGIN_PASSWORD"]:
+                    st.session_state.logged_in = True
+                    st.rerun() # 앱 재실행하여 메인 화면 진입
+                else:
+                    st.error("비밀번호가 일치하지 않습니다.")
+            st.markdown('</div>', unsafe_allow_html=True)
+        
+        # 로그인 안 됐으면 여기서 실행 중단
+        st.stop()
+
+# 앱 실행 시 로그인 함수 호출
+login()
+
+# --- 여기서부터 메인 앱 로직 시작 ---
+st.success("로그인 성공! 거북목 방지 AI 모니터링을 시작합니다.")
+# 형님의 기존 app.py 코드(카메라 제어 등)를 여기에 넣으시면 됩니다.
+
+
 # 페이지 설정
 st.set_page_config(page_title="Anti-Turtle-Neck", page_icon="🐢")
 
