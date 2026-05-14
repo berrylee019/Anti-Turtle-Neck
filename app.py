@@ -84,6 +84,14 @@ if "monitoring_active" not in st.session_state:
 
 # 헤더 영역
 st.success("🔓 로그인 성공! 프리미엄 모니터링 모드 활성화")
+
+col1, col2, col3 = st.columns([0.1, 0.8, 0.1]) # 중앙 정렬을 위한 컬럼 구성
+with col2:
+    st.image(
+        "turtle-neck.png", 
+        use_container_width=True,
+        caption="Anti-Turtle-Neck AI가 당신의 숨겨진 키와 당당한 자세를 되찾아드립니다."
+    )
 st.title("🧘 Anti-Turtle-Neck AI")
 st.header("거북목 속에 숨겨진 '내 키 2cm'를 찾아드립니다!")
 
