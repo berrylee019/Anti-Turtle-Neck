@@ -43,29 +43,29 @@ function sendSilentNotification(title, body) {
 components.html(js_engine, height=0)
 
 # --- 3. 로그인 시스템 ---
-def login():
-    if "logged_in" not in st.session_state:
-        st.session_state.logged_in = False
+#def login():
+#    if "logged_in" not in st.session_state:
+#        st.session_state.logged_in = False
 
-    if not st.session_state.logged_in:
-        col1, col2, col3 = st.columns([1, 2, 1])
-        with col2:
-            st.markdown('<div class="login-card">', unsafe_allow_html=True)
-            st.image("https://cdn-icons-png.flaticon.com/512/3022/3022221.png", width=80)
-            st.title("Anti-Turtle-Neck AI")
-            st.write("서비스 이용을 위해 비밀번호를 입력해주세요.")
-            password = st.text_input("Password", type="password", placeholder="Enter secret password")
+#    if not st.session_state.logged_in:
+#        col1, col2, col3 = st.columns([1, 2, 1])
+#        with col2:
+#            st.markdown('<div class="login-card">', unsafe_allow_html=True)
+#            st.image("https://cdn-icons-png.flaticon.com/512/3022/3022221.png", width=80)
+#            st.title("Anti-Turtle-Neck AI")
+#            st.write("서비스 이용을 위해 비밀번호를 입력해주세요.")
+#            password = st.text_input("Password", type="password", placeholder="Enter secret password")
             
-            if st.button("Login", use_container_width=True):
-                if password == st.secrets["LOGIN_PASSWORD"]:
-                    st.session_state.logged_in = True
-                    st.rerun()
-                else:
-                    st.error("비밀번호가 일치하지 않습니다.")
-            st.markdown('</div>', unsafe_allow_html=True)
-        st.stop()
+#            if st.button("Login", use_container_width=True):
+#                if password == st.secrets["LOGIN_PASSWORD"]:
+#                    st.session_state.logged_in = True
+#                    st.rerun()
+#                else:
+#                    st.error("비밀번호가 일치하지 않습니다.")
+#            st.markdown('</div>', unsafe_allow_html=True)
+#        st.stop()
 
-login()
+#login()
 
 # --- 4. 메인 앱 로직 시작 ---
 # 구글 시트 연결
@@ -75,15 +75,15 @@ except Exception:
     st.error("연결 설정 확인이 필요합니다.")
 
 # 세션 상태 초기화
-if "clicked_buy" not in st.session_state:
-    st.session_state.clicked_buy = False
-if "email_submitted" not in st.session_state:
-    st.session_state.email_submitted = False
-if "monitoring_active" not in st.session_state:
-    st.session_state.monitoring_active = False
+#if "clicked_buy" not in st.session_state:
+#    st.session_state.clicked_buy = False
+#if "email_submitted" not in st.session_state:
+#    st.session_state.email_submitted = False
+#if "monitoring_active" not in st.session_state:
+#    st.session_state.monitoring_active = False
 
 # 헤더 영역
-st.success("🔓 로그인 성공! 프리미엄 모니터링 모드 활성화")
+#st.success("🔓 로그인 성공! 프리미엄 모니터링 모드 활성화")
 
 col1, col2, col3 = st.columns([0.1, 0.8, 0.1]) # 중앙 정렬을 위한 컬럼 구성
 with col2:
