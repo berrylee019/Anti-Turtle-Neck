@@ -149,7 +149,7 @@ else:
         with st.form("payment_form"):
             user_name = st.text_input("성함")
             email_input = st.text_input("이메일 주소")
-            pay_method = st.radio("선호 결제 수단", ["카카오/토스(송금)", "신용카드", "계좌이체"])
+            pay_method = st.radio("선호 결제 수단", ["카카오(송금)", "신용카드", "계좌이체"])
             submit = st.form_submit_button("사전 예약 및 결제 대기 등록")
             
             if submit:
