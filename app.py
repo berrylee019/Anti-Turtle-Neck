@@ -105,6 +105,9 @@ if st.button("🔔 실시간 알림 권한 허용하기"):
     components.html("<script>Notification.requestPermission();</script>", height=0)
     st.toast("상단 브라우저 팝업에서 '허용'을 눌러주세요!")
 
+# 유저를 위한 가이드 문구 추가
+st.caption("⚠️ 만약 알림이 뜨지 않는다면? 주소창 우측의 [팝업 차단] 아이콘을 눌러 '항상 허용'으로 변경해 주세요.")
+
 # 모니터링 토글
 run_monitor = st.toggle("실시간 AI 감지 엔진 가동")
 
