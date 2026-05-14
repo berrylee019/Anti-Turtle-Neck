@@ -5,7 +5,18 @@ from datetime import datetime
 import time
 import streamlit.components.v1 as components
 
-# --- 1. 페이지 설정 및 스타일링 ---
+# --- 1. 세션 상태 초기화 (AttributeError 방지용 최상단 배치) ---
+# 앱이 시작되자마자 변수를 선언하여 에러를 원천 차단합니다.
+if "logged_in" not in st.session_state:
+    st.session_state.logged_in = False
+if "clicked_buy" not in st.session_state:
+    st.session_state.clicked_buy = False
+if "email_submitted" not in st.session_state:
+    st.session_state.email_submitted = False
+if "monitoring_active" not in st.session_state:
+    st.session_state.monitoring_active = False
+
+# --- 2. 페이지 설정 및 스타일링 ---
 st.set_page_config(page_title="Anti-Turtle-Neck", page_icon="🐢", layout="centered")
 
 st.markdown("""
@@ -23,8 +34,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# --- 2. 자바스크립트: 무소음 알림 엔진 ---
-# 이 JS 코드는 브라우저 시스템 알림을 제어합니다.
+# --- 3. 자바스크립트: 무소음 알림 엔진 ---
 js_engine = """
 <script>
 function askPermission() {
@@ -34,7 +44,7 @@ function sendSilentNotification(title, body) {
     if (Notification.permission === "granted") {
         new Notification(title, {
             body: body,
-            silent: true  // 무소음 핵심 설정
+            silent: true
         });
     }
 }
@@ -42,84 +52,66 @@ function sendSilentNotification(title, body) {
 """
 components.html(js_engine, height=0)
 
-# --- 3. 로그인 시스템 ---
-#def login():
-#    if "logged_in" not in st.session_state:
-#        st.session_state.logged_in = False
+# --- 4. 로그인 시스템 (홍보 기간 주석 처리 유지) ---
+# def login():
+#     if not st.session_state.logged_in:
+#         col1, col2, col3 = st.columns([1, 2, 1])
+#         with col2:
+#             st.markdown('<div class="login-card">', unsafe_allow_html=True)
+#             st.image("https://cdn-icons-png.flaticon.com/512/3022/3022221.png", width=80)
+#             st.title("Anti-Turtle-Neck AI")
+#             st.write("서비스 이용을 위해 비밀번호를 입력해주세요.")
+#             password = st.text_input("Password", type="password", placeholder="Enter secret password")
+#             if st.button("Login", use_container_width=True):
+#                 if password == st.secrets["LOGIN_PASSWORD"]:
+#                     st.session_state.logged_in = True
+#                     st.rerun()
+#                 else:
+#                     st.error("비밀번호가 일치하지 않습니다.")
+#             st.markdown('</div>', unsafe_allow_html=True)
+#         st.stop()
+# login()
 
-#    if not st.session_state.logged_in:
-#        col1, col2, col3 = st.columns([1, 2, 1])
-#        with col2:
-#            st.markdown('<div class="login-card">', unsafe_allow_html=True)
-#            st.image("https://cdn-icons-png.flaticon.com/512/3022/3022221.png", width=80)
-#            st.title("Anti-Turtle-Neck AI")
-#            st.write("서비스 이용을 위해 비밀번호를 입력해주세요.")
-#            password = st.text_input("Password", type="password", placeholder="Enter secret password")
-            
-#            if st.button("Login", use_container_width=True):
-#                if password == st.secrets["LOGIN_PASSWORD"]:
-#                    st.session_state.logged_in = True
-#                    st.rerun()
-#                else:
-#                    st.error("비밀번호가 일치하지 않습니다.")
-#            st.markdown('</div>', unsafe_allow_html=True)
-#        st.stop()
-
-#login()
-
-# --- 4. 메인 앱 로직 시작 ---
-# 구글 시트 연결
+# --- 5. 메인 앱 로직 시작 ---
 try:
     conn = st.connection("gsheets", type=GSheetsConnection)
 except Exception:
     st.error("연결 설정 확인이 필요합니다.")
 
-# 세션 상태 초기화
-#if "clicked_buy" not in st.session_state:
-#    st.session_state.clicked_buy = False
-#if "email_submitted" not in st.session_state:
-#    st.session_state.email_submitted = False
-#if "monitoring_active" not in st.session_state:
-#    st.session_state.monitoring_active = False
-
-# 헤더 영역
-#st.success("🔓 로그인 성공! 프리미엄 모니터링 모드 활성화")
-
-col1, col2, col3 = st.columns([0.1, 0.8, 0.1]) # 중앙 정렬을 위한 컬럼 구성
+# 상단 대표 이미지 (Before & After)
+col1, col2, col3 = st.columns([0.1, 0.8, 0.1])
 with col2:
+    # 파일명이 'turtle-neck.png'인지 다시 한번 확인해주세요!
     st.image(
         "turtle-neck.png", 
         use_container_width=True,
         caption="Anti-Turtle-Neck AI가 당신의 숨겨진 키와 당당한 자세를 되찾아드립니다."
     )
+
 st.title("🧘 Anti-Turtle-Neck AI")
 st.header("거북목 속에 숨겨진 '내 키 2cm'를 찾아드립니다!")
 
-# --- 5. 실시간 무소음 알림 데모 섹션 ---
+# --- 6. 실시간 무소음 감지 모드 ---
 st.write("---")
 st.subheader("📸 실시간 무소음 감지 모드")
 st.info("업무 중에 자세가 무너지면 시스템 알림이 '조용히' 찾아옵니다.")
 
-# 알림 권한 요청 버튼
 if st.button("🔔 실시간 알림 권한 허용하기"):
     components.html("<script>Notification.requestPermission();</script>", height=0)
     st.toast("상단 브라우저 팝업에서 '허용'을 눌러주세요!")
 
-# 유저를 위한 가이드 문구 추가
 st.caption("⚠️ 만약 알림이 뜨지 않는다면? 주소창 우측의 [팝업 차단] 아이콘을 눌러 '항상 허용'으로 변경해 주세요.")
 
-# 모니터링 토글
 run_monitor = st.toggle("실시간 AI 감지 엔진 가동")
 
 if run_monitor:
     st.session_state.monitoring_active = True
-    img_file = st.camera_input("카메라가 당신의 자세를 실시간 분석 중입니다", label_visibility="collapsed")
+    img_file = st.camera_input("카메라 분석 중...", label_visibility="collapsed")
     
     if img_file:
         with st.spinner("AI가 체형 각도를 계산 중..."):
-            time.sleep(2) # 분석 시뮬레이션
+            time.sleep(2)
         
-        # 실제 알림 발송 (JS 호출)
         alert_script = """
         <script>
         if (Notification.permission === "granted") {
@@ -140,7 +132,7 @@ else:
 
 st.write("---")
 
-# --- 6. 가치 제안 및 결제 로직 ---
+# --- 7. 가치 제안 및 결제 로직 ---
 with st.expander("✨ 정식 버전 출시 혜택 보기"):
     st.write("- **실시간 무소음 알림**: 소리 없이 시각적 피드백으로 집중력 유지")
     st.write("- **정밀 체형 분석**: 단순 각도를 넘어 어깨 말림(Round Shoulder)까지 감지")
@@ -156,7 +148,6 @@ if not st.session_state.clicked_buy:
 else:
     if not st.session_state.email_submitted:
         st.warning("⚠️ 현재 선착순 할인 수량이 마감 임박입니다.")
-        
         with st.form("payment_form"):
             user_name = st.text_input("성함")
             email_input = st.text_input("이메일 주소")
@@ -175,11 +166,10 @@ else:
                         })
                         updated_df = pd.concat([existing_data, new_data], ignore_index=True)
                         conn.update(worksheet="시트1", data=updated_df)
-                        
                         st.session_state.email_submitted = True
                         st.rerun()
                     except Exception:
-                        st.error("데이터 저장 오류. 구글 시트에 Name, Note 열이 있는지 확인해주세요.")
+                        st.error("데이터 저장 오류. 구글 시트에 Email, Date, Name, Note 열이 있는지 확인해주세요.")
                 else:
                     st.error("올바른 이메일을 입력해주세요.")
     else:
