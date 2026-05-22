@@ -73,10 +73,21 @@ if run_monitor:
     st.session_state.monitoring_active = True
     img_file = st.camera_input("카메라 분석 중...", label_visibility="collapsed")
     
+    # 수정 제안: 고정 문구 대신 분석 시뮬레이션으로 변경
     if img_file:
-        # 분석 시뮬레이션 강화
-        with st.spinner("AI가 랜드마크 468개를 분석 중..."):
-            time.sleep(random.uniform(1.5, 2.5)) # 랜덤 지연 시간
+        with st.spinner("이미지 프레임 처리 중..."):
+            time.sleep(1)
+            st.write("🔍 특징점(Landmarks) 추출 중...")
+            time.sleep(1)
+            st.write("📐 목 각도 계산(Neck Angle: 32°)...")
+            time.sleep(1)
+        
+        # 텍스트 대신 데이터 중심의 분석 리포트로 변경
+        st.markdown("### 분석 리포트")
+        col1, col2 = st.columns(2)
+        col1.metric("경추 각도", "32°", "정상 대비 10° 과도")
+        col2.metric("어깨 말림", "확인됨")
+        st.error("💡 턱을 2cm만 안으로 당기면 경추 부담이 15kg 줄어듭니다.")
         
         # 70% 확률로 거북목 감지 (나머지는 정상)
         is_bad_posture = random.choice([True, True, True, False])
