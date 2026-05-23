@@ -6,7 +6,7 @@ import time
 import streamlit.components.v1 as components
 import random  # 랜덤 편차 구현을 위해 추가
 
-# --- 1. 세션 상태 초기화 (AttributeError 방지용 최상단 배치) ---
+# --- 1. 세션 상태 초기화 ---
 if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
 if "clicked_buy" not in st.session_state:
@@ -35,10 +35,19 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # --- 3. 자바스크립트: 무소음 알림 엔진 ---
+# silent: true 설정을 통해 브라우저 시스템 소리 없이 시각적 알림만 발생시킵니다.
 js_engine = """
 <script>
-function askPermission() {
+function requestNotificationPermission() {
     Notification.requestPermission();
+}
+function sendSilentNotification(title, body) {
+    if (Notification.permission === "granted") {
+        new Notification(title, {
+            body: body,
+            silent: true
+        });
+    }
 }
 </script>
 """
@@ -58,13 +67,13 @@ with col2:
 st.title("🧘 Anti-Turtle-Neck AI")
 st.header("거북목 속에 숨겨진 '내 키 2cm'를 찾아드립니다!")
 
-# --- 5. 실시간 무소음 감지 모드 (수정됨) ---
+# --- 5. 실시간 무소음 감지 모드 ---
 st.write("---")
 st.subheader("📸 실시간 무소음 감지 모드")
-st.info("AI가 실시간으로 자세를 분석합니다.")
+st.info("AI가 실시간으로 자세를 분석하고 무소음 알림을 보냅니다.")
 
 if st.button("🔔 실시간 알림 권한 허용하기"):
-    components.html("<script>Notification.requestPermission();</script>", height=0)
+    components.html("<script>requestNotificationPermission();</script>", height=0)
     st.toast("상단 브라우저 팝업에서 '허용'을 눌러주세요!")
 
 run_monitor = st.toggle("실시간 AI 감지 엔진 가동")
@@ -73,7 +82,6 @@ if run_monitor:
     st.session_state.monitoring_active = True
     img_file = st.camera_input("카메라 분석 중...", label_visibility="collapsed")
     
-    # 수정 제안: 고정 문구 대신 분석 시뮬레이션으로 변경
     if img_file:
         with st.spinner("이미지 프레임 처리 중..."):
             time.sleep(1)
@@ -82,29 +90,25 @@ if run_monitor:
             st.write("📐 목 각도 계산(Neck Angle: 32°)...")
             time.sleep(1)
         
-        # 텍스트 대신 데이터 중심의 분석 리포트로 변경
         st.markdown("### 분석 리포트")
         col1, col2 = st.columns(2)
         col1.metric("경추 각도", "32°", "정상 대비 10° 과도")
         col2.metric("어깨 말림", "확인됨")
-        st.error("💡 턱을 2cm만 안으로 당기면 경추 부담이 15kg 줄어듭니다.")
         
-        # 70% 확률로 거북목 감지 (나머지는 정상)
+        # 70% 확률로 거북목 감지
         is_bad_posture = random.choice([True, True, True, False])
         
         if is_bad_posture:
-            alert_script = """
+            # 무소음 알림 발송 코드 호출
+            alert_code = """
             <script>
-            if (Notification.permission === "granted") {
-                new Notification("🚨 Anti-Turtle-Neck 감지", {
-                    body: "지금 목이 앞으로 나왔습니다! 어깨를 펴세요.",
-                    silent: true
-                });
-            }
+            sendSilentNotification("🚨 Anti-Turtle-Neck 감지", "지금 목이 앞으로 나왔습니다! 어깨를 펴세요.");
             </script>
             """
-            components.html(alert_script, height=0)
+            components.html(alert_code, height=0)
+            
             st.error("🚨 경고: 거북목이 감지되었습니다.")
+            st.warning("💡 턱을 2cm만 안으로 당기면 경추 부담이 15kg 줄어듭니다.")
             st.metric(label="손실된 시각적 키", value=f"{round(random.uniform(1.5, 2.2), 1)}cm", delta="교정 필요", delta_color="inverse")
         else:
             st.success("✅ 완벽한 자세입니다! 지금처럼 유지하세요.")
