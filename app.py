@@ -34,23 +34,8 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# --- 3. 자바스크립트: 무소음 알림 엔진 (수정됨) ---
-js_engine = """
-<script>
-    window.requestNotificationPermission = function() {
-        Notification.requestPermission();
-    };
-    window.sendSilentNotification = function(title, body) {
-        if (Notification.permission === "granted") {
-            new Notification(title, {
-                body: body,
-                silent: true
-            });
-        }
-    };
-</script>
-"""
-components.html(js_engine, height=0)
+# --- 3. 자바스크립트 엔진 삭제 (개별 호출로 변경) ---
+# 중복된 공간 방지를 위해 상단 엔진을 제거하고, 아래 호출 시 직접 전달합니다.
 
 # --- 4. 메인 앱 로직 시작 ---
 try:
@@ -72,7 +57,12 @@ st.subheader("📸 실시간 무소음 감지 모드")
 st.info("AI가 실시간으로 자세를 분석하고 무소음 알림을 보냅니다.")
 
 if st.button("🔔 실시간 알림 권한 허용하기"):
-    components.html("<script>window.requestNotificationPermission();</script>", height=0)
+    # 권한 요청 스크립트 직접 호출
+    components.html("""
+    <script>
+        Notification.requestPermission();
+    </script>
+    """, height=0)
     st.toast("상단 브라우저 팝업에서 '허용'을 눌러주세요!")
 
 run_monitor = st.toggle("실시간 AI 감지 엔진 가동")
@@ -97,13 +87,17 @@ if run_monitor:
         is_bad_posture = random.choice([True, True, True, False])
         
         if is_bad_posture:
-            # 수정된 알림 호출 로직
-            alert_code = """
+            # 알림 발송 스크립트 통합 호출
+            components.html("""
             <script>
-                window.sendSilentNotification("🚨 Anti-Turtle-Neck 감지", "지금 목이 앞으로 나왔습니다! 어깨를 펴세요.");
+                if (Notification.permission === "granted") {
+                    new Notification("🚨 Anti-Turtle-Neck 감지", {
+                        body: "지금 목이 앞으로 나왔습니다! 어깨를 펴세요.",
+                        silent: true
+                    });
+                }
             </script>
-            """
-            components.html(alert_code, height=0)
+            """, height=0)
             
             st.error("🚨 경고: 거북목이 감지되었습니다.")
             st.warning("💡 턱을 2cm만 안으로 당기면 경추 부담이 15kg 줄어듭니다.")
