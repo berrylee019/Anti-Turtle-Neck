@@ -34,21 +34,20 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# --- 3. 자바스크립트: 무소음 알림 엔진 ---
-# silent: true 설정을 통해 브라우저 시스템 소리 없이 시각적 알림만 발생시킵니다.
+# --- 3. 자바스크립트: 무소음 알림 엔진 (수정됨) ---
 js_engine = """
 <script>
-function requestNotificationPermission() {
-    Notification.requestPermission();
-}
-function sendSilentNotification(title, body) {
-    if (Notification.permission === "granted") {
-        new Notification(title, {
-            body: body,
-            silent: true
-        });
-    }
-}
+    window.requestNotificationPermission = function() {
+        Notification.requestPermission();
+    };
+    window.sendSilentNotification = function(title, body) {
+        if (Notification.permission === "granted") {
+            new Notification(title, {
+                body: body,
+                silent: true
+            });
+        }
+    };
 </script>
 """
 components.html(js_engine, height=0)
@@ -67,13 +66,13 @@ with col2:
 st.title("🧘 Anti-Turtle-Neck AI")
 st.header("거북목 속에 숨겨진 '내 키 2cm'를 찾아드립니다!")
 
-# --- 5. 실시간 무소음 감지 모드 ---
+# --- 5. 실시간 무소음 감지 모드 (수정됨) ---
 st.write("---")
 st.subheader("📸 실시간 무소음 감지 모드")
 st.info("AI가 실시간으로 자세를 분석하고 무소음 알림을 보냅니다.")
 
 if st.button("🔔 실시간 알림 권한 허용하기"):
-    components.html("<script>requestNotificationPermission();</script>", height=0)
+    components.html("<script>window.requestNotificationPermission();</script>", height=0)
     st.toast("상단 브라우저 팝업에서 '허용'을 눌러주세요!")
 
 run_monitor = st.toggle("실시간 AI 감지 엔진 가동")
@@ -95,14 +94,13 @@ if run_monitor:
         col1.metric("경추 각도", "32°", "정상 대비 10° 과도")
         col2.metric("어깨 말림", "확인됨")
         
-        # 70% 확률로 거북목 감지
         is_bad_posture = random.choice([True, True, True, False])
         
         if is_bad_posture:
-            # 무소음 알림 발송 코드 호출
+            # 수정된 알림 호출 로직
             alert_code = """
             <script>
-            sendSilentNotification("🚨 Anti-Turtle-Neck 감지", "지금 목이 앞으로 나왔습니다! 어깨를 펴세요.");
+                window.sendSilentNotification("🚨 Anti-Turtle-Neck 감지", "지금 목이 앞으로 나왔습니다! 어깨를 펴세요.");
             </script>
             """
             components.html(alert_code, height=0)
