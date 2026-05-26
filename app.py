@@ -1,6 +1,7 @@
+import sys
 import os
 os.environ["OPENCV_VIDEOIO_PRIORITY_BACKEND"] = "FFMPEG"
-os.environ["QT_QPA_PLATFORM"] = "offscreen"
+sys.setdlopenflags(os.RTLD_GLOBAL | os.RTLD_LAZY)
 import numpy as np
 import cv2
 import mediapipe as mp
