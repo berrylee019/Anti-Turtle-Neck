@@ -1,8 +1,8 @@
-import sys
+import streamlit as st
+import numpy as np
 import cv2
 import mediapipe as mp
-import numpy as np
-import streamlit as st
+import sys
 import pandas as pd
 from datetime import datetime
 import time
