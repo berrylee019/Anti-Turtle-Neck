@@ -1,15 +1,14 @@
 import os
-# 시스템 라이브러리 참조 경로를 현재 환경으로 강제 고정
 os.environ["OPENCV_VIDEOIO_PRIORITY_BACKEND"] = "FFMPEG"
 
 import streamlit as st
-import numpy as np
-
-# OpenCV 로드를 안전하게 처리
+# 다른 라이브러리보다 먼저 cv2를 시도하여 경로를 확보합니다.
 try:
     import cv2
-    st.write("OpenCV 로드 완료!")
 except ImportError:
-    st.error("시스템 환경 문제로 OpenCV를 로드할 수 없습니다.")
+    pass
 
 import mediapipe as mp
+import numpy as np
+
+st.title("🐢 거북목 방지 AI 시스템")
