@@ -6,7 +6,7 @@ import streamlit.components.v1 as components
 import cv2
 import numpy as np
 # from streamlit_gsheets import GSheetsConnection  <-- 일단 주석 처리
-# import mediapipe as mp                           <-- 일단 주석 처리
+import mediapipe as mp
 
 # --- 1. 세션 상태 초기화 ---
 if "logged_in" not in st.session_state:
