@@ -1,8 +1,10 @@
-import streamlit as st
+import os
+os.environ["OPENCV_VIDEOIO_PRIORITY_BACKEND"] = "FFMPEG"
+os.environ["QT_QPA_PLATFORM"] = "offscreen"
 import numpy as np
 import cv2
 import mediapipe as mp
-import sys
+import streamlit as st
 import pandas as pd
 from datetime import datetime
 import time
