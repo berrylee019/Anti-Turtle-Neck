@@ -1,8 +1,14 @@
-import streamlit as st
+import sys
 import os
+
+# [핵심] 바이너리 충돌 방지를 위한 시스템 패치
+sys.setrecursionlimit(2000)
+os.environ["PYTHONPATH"] = "/home/adminuser/venv/lib/python3.14/site-packages"
 
 # 1. 환경 변수 강제 설정
 os.environ["OPENCV_VIDEOIO_PRIORITY_BACKEND"] = "FFMPEG"
+
+import streamlit as st
 
 st.title("🐢 거북목 방지 AI 시스템")
 
