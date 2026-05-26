@@ -1,11 +1,11 @@
 import sys
 import os
 os.environ["OPENCV_VIDEOIO_PRIORITY_BACKEND"] = "FFMPEG"
-sys.setdlopenflags(os.RTLD_GLOBAL | os.RTLD_LAZY)
+import streamlit as st
 import numpy as np
 import cv2
 import mediapipe as mp
-import streamlit as st
+
 import pandas as pd
 from datetime import datetime
 import time
