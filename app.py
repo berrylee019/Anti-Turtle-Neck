@@ -2,19 +2,23 @@ import streamlit as st
 import numpy as np
 import os
 
-# OpenCV가 설치된 환경과 관계없이 FFMPEG 백엔드를 사용하도록 강제
+# 1. 서버 실행 시 라이브러리 충돌 방지
 os.environ["OPENCV_VIDEOIO_PRIORITY_BACKEND"] = "FFMPEG"
 
-# 메인 기능 함수 내부에서 import 하도록 설계
-def get_cv2():
+st.title("🐢 거북목 방지 AI 시스템")
+st.write("실시간 자세를 분석하여 거북목을 방지합니다.")
+
+# 2. 기능을 함수로 분리하여 필요할 때만 호출 (지연 임포트)
+def start_posture_detection():
     import cv2
-    return cv2
-
-def get_mediapipe():
     import mediapipe as mp
-    return mp
+    
+    # 여기서부터 형님의 본격적인 AI 로직이 들어갑니다.
+    mp_pose = mp.solutions.pose
+    pose = mp_pose.Pose()
+    st.success("AI 엔진이 정상적으로 로드되었습니다!")
+    # ... 카메라 캡처 및 각도 계산 로직 ...
 
-st.title("거북목 방지 AI 시스템")
-
-# 이후 코드에서 cv2나 mediapipe가 필요할 때마다 호출
-# 예: cap = get_cv2().VideoCapture(0)
+# 3. 버튼으로 앱의 진입점 제어
+if st.button("자세 분석 시작하기"):
+    start_posture_detection()
